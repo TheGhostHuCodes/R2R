@@ -1,5 +1,7 @@
 use libc::{c_char, c_int};
+use std::collections::VecDeque;
 use std::ffi::CStr;
+use std::fmt::{Display, Formatter};
 
 #[no_mangle]
 pub extern "C" fn solve(line: *const c_char, solution: *mut c_int) -> c_int {
@@ -24,14 +26,86 @@ pub extern "C" fn solve(line: *const c_char, solution: *mut c_int) -> c_int {
             0
         }
         Err(e) => {
-            eprintln!("Error");
+            eprintln!("Error: {}", e);
             1
         }
     }
 }
 
-enum Error {}
+enum Error {
+    InvalidNumber,
+    PopFromEmptyStack,
+}
+
+impl Display for Error {
+    fn fmt(&self, f: &mut Formatter) -> std::fmt::Result {
+        match self {
+            Error::InvalidNumber => write!(f, "Not a valid number or operator"),
+            Error::PopFromEmptyStack => write!(f, "Tried to operate on an empty stack"),
+        }
+    }
+}
+
+#[derive(Debug)]
+struct RpnStack {
+    stack: VecDeque<i32>,
+}
+
+impl RpnStack {
+    fn new() -> RpnStack {
+        RpnStack {
+            stack: VecDeque::new(),
+        }
+    }
+
+    fn push(&mut self, value: i32) {
+        self.stack.push_front(value);
+    }
+
+    fn pop(&mut self) -> Result<i32, Error> {
+        match self.stack.pop_front() {
+            Some(value) => Ok(value),
+            None => Err(Error::PopFromEmptyStack),
+        }
+    }
+}
 
 fn evaluate(problem: &str) -> Result<i32, Error> {
-    Ok(1)
+    let mut stack = RpnStack::new();
+
+    for term in problem.trim().split(' ') {
+        println!("term: {:p} - {:?}", term.as_ptr(), term);
+        match term {
+            "+" => {
+                let y = stack.pop()?;
+                let x = stack.pop()?;
+                stack.push(x + y);
+            }
+            "-" => {
+                let y = stack.pop()?;
+                let x = stack.pop()?;
+                stack.push(x - y);
+            }
+            "*" => {
+                let y = stack.pop()?;
+                let x = stack.pop()?;
+                stack.push(x * y);
+            }
+            "/" => {
+                let y = stack.pop()?;
+                let x = stack.pop()?;
+                stack.push(x / y);
+            }
+            other => match other.parse::<i32>() {
+                Ok(value) => {
+                    stack.push(value);
+                    println!("STACK: {:?}", stack);
+                }
+                Err(_) => return Err(Error::InvalidNumber),
+            },
+        }
+    }
+
+    let value = stack.pop()?;
+    Ok(value)
 }
