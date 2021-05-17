@@ -16,12 +16,22 @@ pub extern "C" fn solve(line: *const c_char, solution: *mut c_int) -> c_int {
         }
     };
 
-    println!("r_str.as_ptr(): {:p}, line: {:p}", r_str.as_ptr(), line);
-    println!("line: {}", r_str);
-
-    unsafe {
-        *solution = 1024;
+    match evaluate(r_str) {
+        Ok(value) => {
+            unsafe {
+                *solution = value as c_int;
+            }
+            0
+        }
+        Err(e) => {
+            eprintln!("Error");
+            1
+        }
     }
+}
 
-    0
+enum Error {}
+
+fn evaluate(problem: &str) -> Result<i32, Error> {
+    Ok(1)
 }
