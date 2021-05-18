@@ -11,3 +11,4 @@ target/
 
 calculator
 http-calculator-rs/nginx-1.19.3/
+build-script-test/src/greet.rs

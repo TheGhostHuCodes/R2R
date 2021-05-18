@@ -1,4 +1,5 @@
 [workspace]
 members = [
-  "calculate"
+  "calculate",
+  "build-script-test"
 ]
