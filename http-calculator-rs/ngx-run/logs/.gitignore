@@ -1,0 +1,5 @@
+# A logs/ directory scafolding that is necessary for this project to run.
+# Ignore everything in this directory
+*
+# Except this file
+!.gitignore

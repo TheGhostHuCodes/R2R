@@ -1,7 +1,7 @@
 ngx_module_type=HTTP
 ngx_module_name=ngx_http_calculator
 ngx_module_srcs="$ngx_addon_dir/ngx_http_calculator.c"
-ngx_module_libs=""
+ngx_module_libs="$HOME/repos/R2R/target/debug/libhttp_calculator_rs.dylib"
 
 . auto/module
 
