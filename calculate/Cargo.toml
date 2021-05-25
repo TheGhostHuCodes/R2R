@@ -5,7 +5,7 @@ authors = ["Yung-Jin (Joey) Hu <yungjinhu@gmail.com>"]
 edition = "2018"
 
 [lib]
-crate-type = ["cdylib"]
+crate-type = ["rlib", "cdylib"]
 
 [dependencies]
 libc = "0.2.80"

@@ -143,6 +143,7 @@ name = "http-calculator-rs"
 version = "0.1.0"
 dependencies = [
  "bindgen",
+ "calculate",
 ]
 
 [[package]]

@@ -2,6 +2,8 @@
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
 #![allow(dead_code)]
+
+use calculate;
 include!(concat!(env!("OUT_DIR"), "/nginx.rs"));
 
 #[no_mangle]
@@ -28,6 +30,11 @@ unsafe extern "C" fn read_body_handler(r: *mut ngx_http_request_t) {
             return;
         }
     };
+
+    match calculate::evaluate(body) {
+        Ok(result) => eprintln!("{} = {}", body, result),
+        Err(e) => eprintln!("{} => error: {}", body, e),
+    }
 
     eprintln!("Read request body: {:?}", body);
 }
